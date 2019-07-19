@@ -5,7 +5,29 @@ public class Euler
 {
    public static void main(String[] args)
    {
-      problem3(600851475143L);
+      problem4(1000);
+   }
+
+   /**
+    * find the largest palindromic number that is a multiple of 2 numbers less than max
+    * @param max the highest number to check
+    */
+   public static void problem4(long max)
+   {
+      long curMax = 0;
+      for(long i = max; i > 0; i--)
+      {
+         for(long j = max; j > 0; j--)
+         {
+            long toCheck = i * j;
+            if(toCheck > curMax && isPalindrome("" + toCheck))
+            {
+               curMax = toCheck;
+            }
+         }
+      }
+
+      System.out.println(curMax);
    }
 
    /**
@@ -103,6 +125,24 @@ public class Euler
          }
 
          if(num % prime == 0)
+         {
+            return false;
+         }
+      }
+
+      return true;
+   }
+
+   /**
+    * A method to check if a string is a palindrome
+    * @param str the string to check
+    * @return true if a palindrome, else false
+    */
+   private static boolean isPalindrome(String str)
+   {
+      for(int i = 0; i < str.length() / 2; i++)
+      {
+         if(str.charAt(i) != str.charAt(str.length() - i - 1))
          {
             return false;
          }
