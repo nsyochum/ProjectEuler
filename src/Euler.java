@@ -1,11 +1,32 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Euler
 {
+   public static List<Long> primes;
+
    public static void main(String[] args)
    {
-      problem4(1000);
+      long max = factorial(20L);
+      primes = buildPrimes(Math.round(Math.pow(20, 4)));
+      problem5(20);
+   }
+
+   /**
+    * Find the smallest number that is divisible by all of the numbers less than max
+    * @param max
+    */
+   public static void problem5(long max)
+   {
+      long cur = 1;
+      for(long i = 1; i < max; i++)
+      {
+         cur = leastCommonMultiple(i, cur);
+      }
+
+      System.out.println(cur);
    }
 
    /**
@@ -48,7 +69,7 @@ public class Euler
    }
    
    /**
-   *  find the sum of all of teh even fibbonacci numbers below max
+   *  find the sum of all of the even fibbonacci numbers below max
    */
    public static void problem2(int max)
    {
@@ -149,5 +170,61 @@ public class Euler
       }
 
       return true;
+   }
+
+   /**
+    * returns the least common multiple of the two inputs
+    * @param a
+    * @param b
+    * @return
+    */
+   private static long leastCommonMultiple(long a, long b)
+   {
+      long lcm = 1;
+      for(long prime : primes)
+      {
+         long aCount = 0;
+         while (a % prime == 0)
+         {
+            a /= prime;
+            aCount++;
+         }
+
+         long bCount = 0;
+         while (b % prime == 0)
+         {
+            b /= prime;
+            bCount++;
+         }
+
+         long max = (aCount > bCount) ? aCount : bCount;
+         for (long i = 0; i < max; i++)
+         {
+            lcm *= prime;
+         }
+
+         if(a == 1 || b == 1)
+            break;
+      }
+
+      if(a != 1)
+         lcm *= a;
+      if( b != 1)
+         lcm *= b;
+
+      return lcm;
+   }
+
+   /**
+    * returns the factorial of the given number
+    * @param n
+    * @return
+    */
+   private static long factorial(long n)
+   {
+      if(n == 0)
+         return 1;
+
+      return n * factorial(n - 1);
    }
 }
