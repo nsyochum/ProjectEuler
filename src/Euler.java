@@ -9,9 +9,24 @@ public class Euler
 
    public static void main(String[] args)
    {
-      long max = factorial(20L);
-      primes = buildPrimes(Math.round(Math.pow(20, 4)));
-      problem5(20);
+      problem6(100);
+   }
+
+   /**
+    * returns the difference between the sum of the squares and the square of the sums
+    * of all of the numbers less than the given
+    * @param max
+    */
+   public static void problem6(long max)
+   {
+      long sum = gaussAdd(max);
+      long sumSquares = 0;
+      for(long i = 0; i <= max; i++)
+      {
+         sumSquares += (i * i);
+      }
+
+      System.out.println((sum * sum) - sumSquares);
    }
 
    /**
@@ -226,5 +241,15 @@ public class Euler
          return 1;
 
       return n * factorial(n - 1);
+   }
+
+   /**
+    * uses Gauss' algorithm to add up all of the numbers less than a given number
+    * @param max
+    * @return
+    */
+   private static long gaussAdd(long max)
+   {
+      return (max * (max + 1)) / 2L;
    }
 }
