@@ -1,7 +1,8 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import utilities.math.*;
+import utilities.StringOperations;
+
+import java.util.List;
 
 public class Euler
 {
@@ -9,33 +10,44 @@ public class Euler
 
    public static void main(String[] args)
    {
-      String bigNum = "73167176531330624919225119674426574742355349194934"
-          + "96983520312774506326239578318016984801869478851843"
-          + "85861560789112949495459501737958331952853208805511"
-          + "12540698747158523863050715693290963295227443043557"
-          + "66896648950445244523161731856403098711121722383113"
-          + "62229893423380308135336276614282806444486645238749"
-          + "30358907296290491560440772390713810515859307960866"
-          + "70172427121883998797908792274921901699720888093776"
-          + "65727333001053367881220235421809751254540594752243"
-          + "52584907711670556013604839586446706324415722155397"
-          + "53697817977846174064955149290862569321978468622482"
-          + "83972241375657056057490261407972968652414535100474"
-          + "82166370484403199890008895243450658541227588666881"
-          + "16427171479924442928230863465674813919123162824586"
-          + "17866458359124566529476545682848912883142607690042"
-          + "24219022671055626321111109370544217506941658960408"
-          + "07198403850962455444362981230987879927244284909188"
-          + "84580156166097919133875499200524063689912560717606"
-          + "05886116467109405077541002256983155200055935729725"
-          + "71636269561882670428252483600823257530420752963450";
-
-      problem10(2000000);
+      primes = Primes.buildPrimes(100000L);
+      problem12(500);
    }
 
+   /**
+    * find the first triangle number with n factors.
+    * @param n
+    */
+   public static void problem12(int n)
+   {
+
+
+      int count = 0;
+      long number = 1;
+      long tri = 0;
+      while(count < 500)
+      {
+         count = 1;
+         tri = Operations.gaussAdd(number);
+         Map<Long, Integer> factors = Factors.primeFactorization(tri, primes);
+         int i = 0;
+         for(long prime : factors.keySet())
+         {
+            count *= (factors.get(prime) + 1);
+         }
+         number++;
+      }
+
+      System.out.println(tri);
+   }
+
+   /**
+    * find the sum off all of the prime numbers less than max
+    * @param max
+    */
    public static void problem10(long max)
    {
-      primes = buildPrimes(max);
+      primes = Primes.buildPrimes(max);
 
       long sum = 0;
       for(long prime : primes)
@@ -97,7 +109,7 @@ public class Euler
    public static void problem7(int max)
    {
       long newMax = 100L * (long) max;
-      primes = buildPrimes(newMax);
+      primes = Primes.buildPrimes(newMax);
       System.out.println(primes.get(max));
    }
 
@@ -108,7 +120,7 @@ public class Euler
     */
    public static void problem6(long max)
    {
-      long sum = gaussAdd(max);
+      long sum = Operations.gaussAdd(max);
       long sumSquares = 0;
       for(long i = 0; i <= max; i++)
       {
@@ -124,10 +136,12 @@ public class Euler
     */
    public static void problem5(long max)
    {
+      primes = Primes.buildPrimes(max * max);
+
       long cur = 1;
       for(long i = 1; i < max; i++)
       {
-         cur = leastCommonMultiple(i, cur);
+         cur = Factors.leastCommonMultiple(i, cur, primes);
       }
 
       System.out.println(cur);
@@ -145,7 +159,7 @@ public class Euler
          for(long j = max; j > 0; j--)
          {
             long toCheck = i * j;
-            if(toCheck > curMax && isPalindrome("" + toCheck))
+            if(toCheck > curMax && StringOperations.isPalindrome("" + toCheck))
             {
                curMax = toCheck;
             }
@@ -160,7 +174,7 @@ public class Euler
     */
    public static void problem3(long max)
    {
-      List<Long> primes = buildPrimes(Math.round(Math.ceil(Math.sqrt(max))));
+      List<Long> primes = Primes.buildPrimes(Math.round(Math.ceil(Math.sqrt(max))));
       for(long prime : primes)
       {
          while(max % prime == 0 && max != prime)
@@ -211,134 +225,5 @@ public class Euler
       }
       
       System.out.println(sum);
-   }
-
-   /**
-    * A method to build a list of prime numbers less than a given max.
-    * @param max the max number to check
-    * @return a list of all primes below max
-    */
-   private static List<Long> buildPrimes(long max)
-   {
-      List<Long> toReturn = new ArrayList<>();
-      for(long i = 2; i < max; i++)
-      {
-         if(isPrime(i, toReturn))
-         {
-            toReturn.add(i);
-         }
-      }
-
-      return toReturn;
-   }
-
-   /**
-    * A helper method for build primes, checks if a number is prime
-    * given the list contains all primes less than the given number.
-    * @param num the number to check
-    * @param primes a list of primes less than the given number
-    * @return true if prime, else false
-    */
-   private static boolean isPrime(long num, List<Long> primes)
-   {
-      for(long prime : primes)
-      {
-         // if we ever hit the square root of the number, then it is prime
-         if(prime > Math.sqrt(num))
-         {
-            return true;
-         }
-
-         if(num % prime == 0)
-         {
-            return false;
-         }
-      }
-
-      return true;
-   }
-
-   /**
-    * A method to check if a string is a palindrome
-    * @param str the string to check
-    * @return true if a palindrome, else false
-    */
-   private static boolean isPalindrome(String str)
-   {
-      for(int i = 0; i < str.length() / 2; i++)
-      {
-         if(str.charAt(i) != str.charAt(str.length() - i - 1))
-         {
-            return false;
-         }
-      }
-
-      return true;
-   }
-
-   /**
-    * returns the least common multiple of the two inputs
-    * @param a
-    * @param b
-    * @return
-    */
-   private static long leastCommonMultiple(long a, long b)
-   {
-      long lcm = 1;
-      for(long prime : primes)
-      {
-         long aCount = 0;
-         while (a % prime == 0)
-         {
-            a /= prime;
-            aCount++;
-         }
-
-         long bCount = 0;
-         while (b % prime == 0)
-         {
-            b /= prime;
-            bCount++;
-         }
-
-         long max = (aCount > bCount) ? aCount : bCount;
-         for (long i = 0; i < max; i++)
-         {
-            lcm *= prime;
-         }
-
-         if(a == 1 || b == 1)
-            break;
-      }
-
-      if(a != 1)
-         lcm *= a;
-      if( b != 1)
-         lcm *= b;
-
-      return lcm;
-   }
-
-   /**
-    * returns the factorial of the given number
-    * @param n
-    * @return
-    */
-   private static long factorial(long n)
-   {
-      if(n == 0)
-         return 1;
-
-      return n * factorial(n - 1);
-   }
-
-   /**
-    * uses Gauss' algorithm to add up all of the numbers less than a given number
-    * @param max
-    * @return
-    */
-   private static long gaussAdd(long max)
-   {
-      return (max * (max + 1)) / 2L;
    }
 }
