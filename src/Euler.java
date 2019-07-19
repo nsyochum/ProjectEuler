@@ -30,9 +30,35 @@ public class Euler
           + "05886116467109405077541002256983155200055935729725"
           + "71636269561882670428252483600823257530420752963450";
 
-      problem8(bigNum, 13);
+      problem9(1000);
    }
 
+   /**
+    * Finds the product of pythagorean triples with a given sum.
+    * @param sum
+    */
+   public static void problem9(int sum)
+   {
+      for(int i = 0; i < sum; i++)
+      {
+         for(int j = 0; j < sum; j++)
+         {
+            for(int k = 0; k < sum; k++)
+            {
+               if((i * i + j * j == k * k) && i + j + k == 1000)
+               {
+                  System.out.println("" + (i * j * k));
+               }
+            }
+         }
+      }
+   }
+
+   /**
+    * Given a string that represents a number, find the max product of n consecutive numbers
+    * @param number
+    * @param subProduct
+    */
    public static void problem8(String number, int subProduct)
    {
       long curMax = 0;
