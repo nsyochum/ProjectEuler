@@ -30,7 +30,20 @@ public class Euler
           + "05886116467109405077541002256983155200055935729725"
           + "71636269561882670428252483600823257530420752963450";
 
-      problem9(1000);
+      problem10(2000000);
+   }
+
+   public static void problem10(long max)
+   {
+      primes = buildPrimes(max);
+
+      long sum = 0;
+      for(long prime : primes)
+      {
+         sum += prime;
+      }
+
+      System.out.println(sum);
    }
 
    /**
