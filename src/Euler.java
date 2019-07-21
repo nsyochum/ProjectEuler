@@ -1,3 +1,4 @@
+import java.math.BigInteger;
 import java.util.Map;
 import utilities.math.*;
 import utilities.StringOperations;
@@ -6,22 +7,28 @@ import java.util.List;
 
 public class Euler
 {
-   public static List<Long> primes;
+   public static List<BigInteger> primes;
 
    public static void main(String[] args)
    {
-      problem14(1000000);
+      problem15(BigInteger.valueOf(20));
+   }
+
+   public static void problem15(BigInteger n)
+   {
+      // there are 2n options for n moves, so just perform 2n Choose n
+      System.out.println(Operations.choose(n.multiply(BigInteger.TWO), n));
    }
 
    /**
     * find the longest collatz sequence below n
     * @param n
     */
-   public static void problem14(long n)
+   public static void problem14(BigInteger n)
    {
       int max = 0;
-      long maxNum = 0;
-      for(long i = 1; i < n; i++)
+      BigInteger maxNum = BigInteger.ZERO;
+      for(BigInteger i = BigInteger.ONE; i.compareTo(n) < 0; i = i.add(BigInteger.ONE))
       {
          int length = Operations.collatzLength(i);
          if(length > max)
@@ -82,19 +89,19 @@ public class Euler
    public static void problem12(int n)
    {
       int count = 0;
-      long number = 1;
-      long tri = 0;
+      BigInteger number = BigInteger.ONE;
+      BigInteger tri = BigInteger.ZERO;
       while(count < 500)
       {
          count = 1;
          tri = Operations.gaussAdd(number);
-         Map<Long, Integer> factors = Factors.primeFactorization(tri, primes);
+         Map<BigInteger, Integer> factors = Factors.primeFactorization(tri, primes);
          int i = 0;
-         for(long prime : factors.keySet())
+         for(BigInteger prime : factors.keySet())
          {
             count *= (factors.get(prime) + 1);
          }
-         number++;
+         number = number.add(BigInteger.ONE);
       }
 
       System.out.println(tri);
@@ -104,14 +111,14 @@ public class Euler
     * find the sum off all of the prime numbers less than max
     * @param max
     */
-   public static void problem10(long max)
+   public static void problem10(BigInteger max)
    {
       primes = Primes.buildPrimes(max);
 
-      long sum = 0;
-      for(long prime : primes)
+      BigInteger sum = BigInteger.ZERO;
+      for(BigInteger prime : primes)
       {
-         sum += prime;
+         sum = sum.add(prime);
       }
 
       System.out.println(sum);
@@ -145,16 +152,16 @@ public class Euler
     */
    public static void problem8(String number, int subProduct)
    {
-      long curMax = 0;
+      BigInteger curMax = BigInteger.ZERO;
       for(int i = 0; i < number.length() - subProduct; i++)
       {
-         long temp = 1;
+         BigInteger temp = BigInteger.ONE;
          for(int j = 0; j < subProduct; j++)
          {
-            temp *= Long.parseLong("" + number.charAt(i + j));
+            temp = temp .multiply(new BigInteger("" + number.charAt(i + j)));
          }
 
-         if(temp > curMax)
+         if(temp.compareTo(curMax) > 0)
             curMax = temp;
       }
 
@@ -167,7 +174,7 @@ public class Euler
     */
    public static void problem7(int max)
    {
-      long newMax = 100L * (long) max;
+      BigInteger newMax = new BigInteger("" + (100 * max));
       primes = Primes.buildPrimes(newMax);
       System.out.println(primes.get(max));
    }
@@ -177,28 +184,28 @@ public class Euler
     * of all of the numbers less than the given
     * @param max
     */
-   public static void problem6(long max)
+   public static void problem6(BigInteger max)
    {
-      long sum = Operations.gaussAdd(max);
-      long sumSquares = 0;
-      for(long i = 0; i <= max; i++)
+      BigInteger sum = Operations.gaussAdd(max);
+      BigInteger sumSquares = BigInteger.ZERO;
+      for(BigInteger i = BigInteger.ZERO; i.compareTo(max) <= 0; i = i.add(BigInteger.ONE))
       {
-         sumSquares += (i * i);
+         sumSquares = sumSquares.add(i.pow(2));
       }
 
-      System.out.println((sum * sum) - sumSquares);
+      System.out.println(sum.pow(2).subtract(sumSquares));
    }
 
    /**
     * Find the smallest number that is divisible by all of the numbers less than max
     * @param max
     */
-   public static void problem5(long max)
+   public static void problem5(BigInteger max)
    {
-      primes = Primes.buildPrimes(max * max);
+      primes = Primes.buildPrimes(max.pow(2));
 
-      long cur = 1;
-      for(long i = 1; i < max; i++)
+      BigInteger cur = BigInteger.ONE;
+      for(BigInteger i = BigInteger.ONE; i.compareTo(max) < 0; i = i.add(BigInteger.ONE))
       {
          cur = Factors.leastCommonMultiple(i, cur, primes);
       }
@@ -210,15 +217,15 @@ public class Euler
     * find the largest palindromic number that is a multiple of 2 numbers less than max
     * @param max the highest number to check
     */
-   public static void problem4(long max)
+   public static void problem4(BigInteger max)
    {
-      long curMax = 0;
-      for(long i = max; i > 0; i--)
+      BigInteger curMax = BigInteger.ZERO;
+      for(BigInteger i = max; i.compareTo(BigInteger.ZERO) > 0; i = i.subtract(BigInteger.ONE))
       {
-         for(long j = max; j > 0; j--)
+         for(BigInteger j = max; j.compareTo(BigInteger.ZERO) > 0; j = j.subtract(BigInteger.ONE))
          {
-            long toCheck = i * j;
-            if(toCheck > curMax && StringOperations.isPalindrome("" + toCheck))
+            BigInteger toCheck = i.multiply(j);
+            if(toCheck.compareTo(curMax) > 0 && StringOperations.isPalindrome("" + toCheck))
             {
                curMax = toCheck;
             }
@@ -231,14 +238,14 @@ public class Euler
    /**
     * Find the largest prime factor of a given number.
     */
-   public static void problem3(long max)
+   public static void problem3(BigInteger max)
    {
-      List<Long> primes = Primes.buildPrimes(Math.round(Math.ceil(Math.sqrt(max))));
-      for(long prime : primes)
+      List<BigInteger> primes = Primes.buildPrimes(max);
+      for(BigInteger prime : primes)
       {
-         while(max % prime == 0 && max != prime)
+         while(max.mod(prime).intValue() == 0 && max != prime)
          {
-            max /= prime;
+            max = max.divide(prime);
          }
       }
 

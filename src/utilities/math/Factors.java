@@ -1,5 +1,6 @@
 package utilities.math;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,39 +12,39 @@ public class Factors {
    * @param b
    * @return
    */
-  public static long leastCommonMultiple(long a, long b, List<Long> primes)
+  public static BigInteger leastCommonMultiple(BigInteger a, BigInteger b, List<BigInteger> primes)
   {
-    long lcm = 1;
-    for(long prime : primes)
+    BigInteger lcm = BigInteger.ONE;
+    for(BigInteger prime : primes)
     {
-      long aCount = 0;
-      while (a % prime == 0)
+      BigInteger aCount = BigInteger.ZERO;
+      while (a.mod(prime).intValue() == 0)
       {
-        a /= prime;
-        aCount++;
+        a = a.divide(prime);
+        aCount = aCount.add(BigInteger.ONE);
       }
 
-      long bCount = 0;
-      while (b % prime == 0)
+      BigInteger bCount = BigInteger.ZERO;
+      while (b.mod(prime).intValue() == 0)
       {
-        b /= prime;
-        bCount++;
+        b = b.divide(prime);
+        bCount = bCount.add(bCount);
       }
 
-      long max = (aCount > bCount) ? aCount : bCount;
-      for (long i = 0; i < max; i++)
+      BigInteger max = aCount.max(bCount);
+      for (BigInteger i = BigInteger.ZERO; i.compareTo(max) < 0; i.add(BigInteger.ONE))
       {
-        lcm *= prime;
+        lcm.multiply(prime);
       }
 
-      if(a == 1 || b == 1)
+      if(a.intValue() == 1 || b.intValue() == 1)
         break;
     }
 
-    if(a != 1)
-      lcm *= a;
-    if( b != 1)
-      lcm *= b;
+    if(a.intValue() != 1)
+      lcm = lcm.multiply(a);
+    if(b.intValue() != 1)
+      lcm = lcm.multiply(b);
 
     return lcm;
   }
@@ -54,22 +55,22 @@ public class Factors {
    * @param primes
    * @return
    */
-  public static Map<Long, Integer> primeFactorization(long num, List<Long> primes)
+  public static Map<BigInteger, Integer> primeFactorization(BigInteger num, List<BigInteger> primes)
   {
-    Map<Long, Integer> toReturn = new HashMap<>();
-    for(long prime : primes)
+    Map<BigInteger, Integer> toReturn = new HashMap<>();
+    for(BigInteger prime : primes)
     {
 
-      while(num % prime == 0)
+      while(num.mod(prime).intValue() == 0)
       {
         int count = toReturn.getOrDefault(prime, 0);
         count++;
         toReturn.put(prime, count);
 
-        num /= prime;
+        num = num.divide(prime);
       }
 
-      if(num == 1)
+      if(num.intValue() == 1)
       {
         break;
       }

@@ -1,5 +1,6 @@
 package utilities.math;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,10 +11,10 @@ public class Primes
    * @param max the max number to check
    * @return a list of all primes below max
    */
-  public static List<Long> buildPrimes(long max)
+  public static List<BigInteger> buildPrimes(BigInteger max)
   {
-    List<Long> toReturn = new ArrayList<>();
-    for(long i = 2; i < max; i++)
+    List<BigInteger> toReturn = new ArrayList<>();
+    for(BigInteger i = BigInteger.TWO; i.compareTo(max) > 0; i = i.add(BigInteger.ONE))
     {
       if(isPrime(i, toReturn))
       {
@@ -31,17 +32,17 @@ public class Primes
    * @param primes a list of primes less than the given number
    * @return true if prime, else false
    */
-  public static boolean isPrime(long num, List<Long> primes)
+  public static boolean isPrime(BigInteger num, List<BigInteger> primes)
   {
-    for(long prime : primes)
+    for(BigInteger prime : primes)
     {
       // if we ever hit the square root of the number, then it is prime
-      if(prime > Math.sqrt(num))
+      if(prime.pow(2).compareTo(num) > 0)
       {
         return true;
       }
 
-      if(num % prime == 0)
+      if(num.mod(prime).intValue() == 0)
       {
         return false;
       }

@@ -1,14 +1,16 @@
 package utilities.math;
 
+import java.math.BigInteger;
+
 public class Operations {
  /**
    * uses Gauss' algorithm to add up all of the numbers less than a given number
    * @param max
    * @return
    */
-  public static long gaussAdd(long max)
+  public static BigInteger gaussAdd(BigInteger max)
   {
-    return (max * (max + 1)) / 2L;
+    return max.multiply(max.add(BigInteger.ONE)).divide(BigInteger.TWO);
   }
 
 
@@ -17,12 +19,12 @@ public class Operations {
    * @param n
    * @return
    */
-  public static long factorial(long n)
+  public static BigInteger factorial(BigInteger n)
   {
-    if(n == 0)
-      return 1;
+    if(n.intValue() == 0)
+      return BigInteger.ONE;
 
-    return n * factorial(n - 1);
+    return n.multiply(factorial(n.subtract(BigInteger.ONE)));
   }
 
   /**
@@ -41,20 +43,28 @@ public class Operations {
     return (n + m) % 10;
   }
 
-  public static int collatzLength(long n)
+  public static int collatzLength(BigInteger n)
   {
-    if(n == 1)
+    if(n.intValue() == 1)
     {
       return 1;
     }
-    if(n % 2 == 0)
+    if(n.mod(BigInteger.TWO).intValue() == 0)
     {
-      n = n / 2;
+      n = n.divide(BigInteger.TWO);
     }
     else
     {
-      n = 3*n + 1;
+      n = n.multiply(BigInteger.valueOf(3L)).add(BigInteger.ONE);
     }
     return collatzLength(n) + 1;
+  }
+
+  public static BigInteger choose(BigInteger n, BigInteger k)
+  {
+    BigInteger nFactorial = factorial(n);
+    BigInteger kFactorial = factorial(k);
+    BigInteger nMinusKFactorial = factorial(n.subtract(k));
+    return nFactorial.divide(kFactorial.multiply(nMinusKFactorial));
   }
 }
