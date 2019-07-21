@@ -24,4 +24,37 @@ public class Operations {
 
     return n * factorial(n - 1);
   }
+
+  /**
+   * returns
+   * @param n
+   * @param m
+   * @return
+   */
+  public static int carryDigit(int n, int m)
+  {
+    return (n + m) / 10;
+  }
+
+  public static int resultDigit(int n, int m)
+  {
+    return (n + m) % 10;
+  }
+
+  public static int collatzLength(long n)
+  {
+    if(n == 1)
+    {
+      return 1;
+    }
+    if(n % 2 == 0)
+    {
+      n = n / 2;
+    }
+    else
+    {
+      n = 3*n + 1;
+    }
+    return collatzLength(n) + 1;
+  }
 }

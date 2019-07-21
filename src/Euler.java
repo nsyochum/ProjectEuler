@@ -10,8 +10,69 @@ public class Euler
 
    public static void main(String[] args)
    {
-      primes = Primes.buildPrimes(100000L);
-      problem12(500);
+      problem14(1000000);
+   }
+
+   /**
+    * find the longest collatz sequence below n
+    * @param n
+    */
+   public static void problem14(long n)
+   {
+      int max = 0;
+      long maxNum = 0;
+      for(long i = 1; i < n; i++)
+      {
+         int length = Operations.collatzLength(i);
+         if(length > max)
+         {
+            max = length;
+            maxNum = i;
+         }
+      }
+      System.out.println(maxNum + " " + max);
+   }
+
+   /**
+    * Find the first ten digits of the sum of the numbers
+    * @param nums
+    */
+   public static void problem13(String[] nums)
+   {
+      int[] result = new int[nums[0].length() + (int) Math.round(Math.log(nums.length))];
+      int[][] numbers = new int[nums.length][nums[0].length()];
+      for(int i = 0; i < nums.length; i++)
+      {
+         numbers[i] = StringOperations.stringToIntArray(nums[i]);
+      }
+      for(int digit = 0; digit < numbers[0].length; digit++)
+      {
+         for(int[] number : numbers)
+         {
+            int subresult = number[digit] + result[digit];
+            result[digit] = subresult;
+         }
+
+         int carry = result[digit];
+         int tempDig = digit;
+         while(carry > 0)
+         {
+            result[tempDig] = carry % 10;
+            result[++tempDig] += carry / 10;
+            carry = result[tempDig];
+         }
+      }
+
+      String resultStr = "";
+      for(int i = result.length - 1; i >= 0 && resultStr.length() != 10; i--)
+      {
+         if(result[i] != 0 || resultStr.length() > 0)
+         {
+            resultStr += result[i];
+         }
+      }
+
+      System.out.println(resultStr);
    }
 
    /**
@@ -20,8 +81,6 @@ public class Euler
     */
    public static void problem12(int n)
    {
-
-
       int count = 0;
       long number = 1;
       long tri = 0;

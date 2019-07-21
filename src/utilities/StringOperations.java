@@ -19,4 +19,16 @@ public class StringOperations
 
     return true;
   }
+
+  public static int[] stringToIntArray(String num)
+  {
+    int[] toReturn = new int[num.length()];
+
+    for (int i = 0; i < num.length(); i++)
+    {
+      toReturn[num.length() - i - 1] = Integer.parseInt("" + num.charAt(i));
+    }
+
+    return toReturn;
+  }
 }
