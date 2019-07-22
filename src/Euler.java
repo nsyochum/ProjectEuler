@@ -11,7 +11,19 @@ public class Euler
 
    public static void main(String[] args)
    {
-      problem15(BigInteger.valueOf(20));
+      problem16(1000);
+   }
+
+   public static void problem16(int exp)
+   {
+      String result = BigInteger.TWO.pow(exp).toString();
+      long sum = 0;
+      for(char number : result.toCharArray())
+      {
+         sum += Long.parseLong("" + number);
+      }
+
+      System.out.println(sum);
    }
 
    public static void problem15(BigInteger n)
